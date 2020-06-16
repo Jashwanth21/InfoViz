@@ -1,0 +1,117 @@
+<html>
+   <head>
+      <title> Jashwanth Jegadeesan Vijayalakshmi - Assignment</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+      <style>
+         body {
+         font-family: sans-serif;
+         }
+      </style>
+   </head>
+   <body>
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+               <td style="vertical-align: top;">Jashwanth Jegadeesan Vijayalakshmi</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+               <td style="vertical-align: top;">19200055</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+               <td style="vertical-align: top;"> The given dataset is obtained from <a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct">Data.gov.ie</a> and contains the VehicleMakers, their models produced and the years in which they were produced. Also, it contains the pass and fail percentages and the reasons for it (With its percentage contributions)
+               </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+               <td style="vertical-align: top;">Initial questions that popped up were : 1).Which company produced the most number of failed vehicles and which produced the most number of passed vehicles? 2).What is the relationship between reason for failure, vehicle makers and the year of birth? 3).What is the relationship between the mean of failures and passes with the year of birth? </td>
+            </tr>
+         </tbody>
+      </table>
+      <hr />
+      <div id="vis"></div>
+      <hr />
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+               <td style="vertical-align: top;">The two barcharts show the companies which produced the most number of passed and failed vehicles in descending order. Companies which produced the highest pass and failed vehicles are highlighted here.</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Insight:</strong></td>
+               <td style="vertical-align: top;">Binz as expected produced the maximum percentage of pass vehicles and I did not expect it. Followed by other International VehicleMakers and Lamborghini. The VehicleMaker Ardagh produced the maximum percentage of fail vehicles followed Bramwith and Bristol.Also, we can see that Binz never produced any fail vehicle.</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Design considerations</strong></td>
+               <td style="vertical-align: top;">Barchart is one of the easiest ways to portray the rankings when sorted. Hence, Barchart is used here to depict the relationship between the mentioned attributes. Comparision is considerably easy when the graph is a barchart. The winner in both the cases are highlighted in darkblue which is even more convinient to distinguish the capability and the track record of each individual vehiclemaker.<br> The alternatives that were considered were pie chart and line graph. But due to the presence of more number of VehicleMakers, the usage of such charts and graphs would make the visualised data unreadable. </td>
+            </tr>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+               <td style="vertical-align: top;">VehicleMakers whose total is greater than 0 is only displayed and the remaining are filtered to avoid confusion. This will reduce the redundant and unwanted data in the chart and gives us a clear picture of the stats.</td>
+            </tr>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+        var yourVlSpec =  
+  {
+  "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+   "data": {
+    "url": "https://raw.githubusercontent.com/Jashwanth21/InfoViz/master/Make%20Model%20Data%202016.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+   "transform": [
+    {
+      "filter":"datum.Total >0 "
+    }],
+  "title": {
+    "text": "The mean Pass % and Fail % respectively for each vehicle model",
+    "anchor": "middle"
+  },
+ "repeat": {"column": ["PASS %","FAIL %"]},
+ "spec":{
+    "mark": "bar",
+    "encoding": {
+        "y": {
+        "field": "VehicleMake",
+        "type": "nominal",
+        "axis": {"title": "Vehicle Makers",
+            "grid": false,
+            "titleFontSize": 20},
+
+        "sort": {
+            "op": "mean",
+            "field": {"repeat": "column"},
+            "order": "descending"
+        }
+        },
+        "x": {
+        "field": {"repeat": "column"},
+        "type": "quantitative",
+        "aggregate": "mean"
+        },
+         "color": {
+        "condition": [{
+          "test": "datum.VehicleMake == 'BINZ'",
+          "value": "#0D1E81"
+        },
+        {
+          "test": "datum.VehicleMake == 'ARDAGH'",
+          "value": "#0D1E81"
+        }
+        ],
+        "value": "#979EC4"
+      }
+    } 
+}
+}
+
+            vegaEmbed("#vis", yourVlSpec);
+      </script>
+   </body>
+</html>

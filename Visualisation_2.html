@@ -1,0 +1,102 @@
+<html>
+   <head>
+      <title> Jashwanth Jegadeesan Vijayalakshmi - Assignment</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+      <style>
+         body {
+         font-family: sans-serif;
+         }
+      </style>
+   </head>
+   <body>
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+               <td style="vertical-align: top;">Jashwanth Jegadeesan Vijayalakshmi</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+               <td style="vertical-align: top;">19200055</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+               <td style="vertical-align: top;"> The given dataset is obtained from <a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct">Data.gov.ie</a> and contains the VehicleMakers, their models produced and the years in which they were produced. Also, it contains the pass and fail percentages and the reasons for it (With its percentage contributions)
+               </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+               <td style="vertical-align: top;">Initial questions that popped up were : 1).Which company produced the most number of failed vehicles and which produced the most number of passed vehicles? 2).What is the relationship between reason for failure, vehicle makers and the year of birth? 3).What is the relationship between the mean of failures and passes with the year of birth? </td>
+            </tr>
+         </tbody>
+      </table>
+      <hr />
+      <div id="vis"></div>
+      <hr />
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+               <td style="vertical-align: top;">There are 12 Strip Charts in this visualisation. Each square in these charts represent a VehicleMaker. The 12 charts represent the percentage of contribution of each cause of failure. Darker strips in the chart means there are more number of VehicleMakers on that particular strip.</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Insight:</strong></td>
+               <td style="vertical-align: top;">The main insight that is observed is the failures due to light test,suspension test and other tests are less. There has been less failures due to Chassis&body and suspension test as the years progressed. Lighting&Electrical and Wheels&Tyres failure has not yet been worked on as we can see that the trend is decreasing only to a certain extent. </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Design considerations</strong></td>
+               <td style="vertical-align: top;">Strip chart is used to represent and compare the variance and occurences of number of vehicle makers. But the disadvantage is that the overlapping causes ambiguity to the viewers. So to make it even more clear, placing the cursor over the squares will show what VehicleMakers are present. <br> This representation apparently shows clear distinguished variance between the different types of failure causes and also the trend in its increase and decrease is shown clearly. </td>
+            </tr>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+               <td style="vertical-align: top;">VehicleMakers whose total is greater than 0 is only displayed and the remaining are filtered to avoid confusion. This will reduce the redundant and unwanted data in the chart and gives us a clear picture of the stats. Also, to analyse the latest trend and trim the data the YearOfBirth greater than 1990 is taken, leaving behind the old redundant data</td>
+            </tr>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+        var yourVlSpec =  {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {
+    "url":"https://raw.githubusercontent.com/Jashwanth21/InfoViz/master/Make%20Model%20Data%202016.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"filter": "datum.Total > 0"},
+     {"filter": "datum.YearOfBirth > 1990"}
+  ],
+  "repeat": {"column": ["Braking Equipment %", "Light test %", "Steering and Suspension %","Vehicle and Safety Equipment %","Lighting and Electrical %","Wheels and Tyres %","Chassis and Body %","Side Slip Test %","Suspension Test %","Brake Test %","Emmissions %","OTHER %"]},
+  "title": {
+    "text": "Various types of failure % of Vehicle make for each Year Of Birth",
+    "anchor": "middle",
+    "fontSize": 20,
+    "offset": 20
+  },
+  "spec": {
+    "mark": {
+      "type":"square", 
+    "tooltip": true},
+    "width": 350,
+    "encoding": {
+      "y": {
+        "field": "YearOfBirth",
+        "type": "ordinal",
+        "sort": {"op": "mean", "field": "YearOfBirth","order": "ascending"},
+        "axis": {"title": "Year"}       
+      },
+      "x": {
+        "field": {"repeat": "column"},
+        "type": "quantitative",
+        "scale": {"zero": false}
+      },
+      "tooltip": {"field": "VehicleMake", "type": "nominal"},
+      "color": {"value": "green"},
+      "opacity": {"value": 0.3}
+    }
+  }
+}
+            vegaEmbed("#vis", yourVlSpec);
+      </script>
+   </body>
+</html>
